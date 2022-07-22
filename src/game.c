@@ -1,6 +1,7 @@
 #include "core.h"
 
 SDL_Point mpos;
+renderObject *text;
 
 //1 is left click, 2 is middle click and 3 is right click
 void MouseButtonDown(Uint8 button){
@@ -12,15 +13,23 @@ void MouseButtonUp(Uint8 button){
 }
 
 void OnStart(){
-  SDL_Color background = {255,0,0,255};
+  SDL_Color background = {255,255,255,255};
+  SDL_Color textColor = {0, 0, 0, 255};
+
+  ChangeCurrentFont("assets/font.ttf", 56);
+  text = newRenderObject(NULL);
+  text->texture = textureFromText("Hello World, This is a new line", textColor);
+  Draw(text);
   SetWindow(800, 600, 60, "Game");
   SetBackgroundColor(background);
+  PlayMusic("assets/music.wav");
+  AudioDeviceIsPaused(false);
 }
 
-int x, y;
 void PerFrameUpdate(){
-  if(KeyIsDown(SDLK_w)){
+  if(KeyIsUp(SDLK_w)){
     printf("Key Down\n");
+    PlaySoundFX("assets/soundfx.wav", 128);
   }
   GetMousePosition(&mpos);
 }

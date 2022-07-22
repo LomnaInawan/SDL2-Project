@@ -3,12 +3,13 @@
 from subprocess import run
 
 CC = ["gcc"]
-flags = ["-g", "-lSDL2main", "-lSDL2", "-Wall"]
+flags = ["-g", "-lSDL2main", "-lSDL2", "-lSDL2_ttf", "-Wall"]
 files = ["./src/basic-collision.c",
          "./src/core.c",
          "./src/draw.c",
-         "./src/game.c"
-#         "./src/input.c"
+         "./src/game.c",
+         "./src/text.c",
+         "./src/audio.c"
          ]
 include = ["./include"]
 

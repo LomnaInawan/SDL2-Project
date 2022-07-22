@@ -95,24 +95,29 @@ SDL_Texture* textureFromImage(char *img_path){
 
 //Initializes a render object by taking the path to an image
 renderObject* newRenderObject(char *img_path){
+  renderObject* r = (renderObject*) malloc(sizeof(renderObject));
+
+  if(img_path != NULL){
     SDL_Surface *surface;
     SDL_Texture *texture;
     surface = SDL_LoadBMP(img_path);
     texture = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
-    SDL_RendererFlip f = SDL_FLIP_NONE;
-    SDL_Point position = {0,0};
-    vector2D scale = {1,1};
-    double a = 0;
-
-    renderObject* r = (renderObject*) malloc(sizeof(renderObject));
     r->texture = texture;
-    r->position = position;
-    r->scale = scale;
-    r->anchor = position;
-    r->angle = a;
-    r->flip = f;
-    return r;
+  }else{
+    r->texture = NULL;
+  }
+  SDL_RendererFlip f = SDL_FLIP_NONE;
+  SDL_Point position = {0,0};
+  vector2D scale = {1,1};
+  double a = 0;
+
+  r->position = position;
+  r->scale = scale;
+  r->anchor = position;
+  r->angle = a;
+  r->flip = f;
+  return r;
 }
 
 //Initialize the variables required by the script

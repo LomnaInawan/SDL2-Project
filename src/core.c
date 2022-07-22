@@ -7,6 +7,12 @@
 
 #include "core.h"
 
+#include <SDL2/SDL_ttf.h> //Remove if not using sdl_ttf
+
+void StartAudioFunctions();
+void AudioUpdate();
+//Functions in text, remove if not using sdl_ttf
+void StartTextFunctions(SDL_Renderer *_rend);
 //Functions in draw.c file
 void StartDrawFunctions(SDL_Renderer *renderer);
 void Render();
@@ -80,6 +86,7 @@ void mainloop(){
   SDL_RenderClear(renderer);
   PerFrameUpdate(); //The Update Function
   Render(); //Render the frame
+  AudioUpdate(); //Update the audio queue
   SDL_RenderPresent(renderer);
 
   Uint64 delta = SDL_GetTicks() - startLoop;
@@ -94,11 +101,14 @@ int main(int argc, char *argv[]){
     printf("Error initializing SDL : %s",SDL_GetError());
     exit(EXIT_FAILURE);
   }
+
   window = SDL_CreateWindow("Title",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,windowWidth,windowHeight, SDL_WINDOW_RESIZABLE);
   if(window == NULL){
     printf("Failed to create window : %s",SDL_GetError());
     exit(EXIT_FAILURE);
   }
+
+  TTF_Init(); //Remove if not using sdl_ttf
 
   renderer = SDL_CreateRenderer(window, -1 ,SDL_RENDERER_ACCELERATED);
   if(renderer == NULL){
@@ -106,7 +116,9 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
+  StartTextFunctions(renderer);
   StartDrawFunctions(renderer);
+  StartAudioFunctions();
   OnStart();
 
 
@@ -124,6 +136,7 @@ int main(int argc, char *argv[]){
   }
   #endif
 
+  TTF_Quit(); //Remove if not using sdl_ttf
   SDL_Quit();
   return EXIT_SUCCESS;
 }

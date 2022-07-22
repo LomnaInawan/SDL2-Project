@@ -41,6 +41,15 @@ double getVectorAngle(vector2D v);
 SDL_Point newPoint(int x, int y);
 vector2D newVector(float x, float y);
 
+//Functions in text
+int ChangeCurrentFont(char *fontPath, int fontSize);
+SDL_Texture* textureFromText(char *text, SDL_Color textColor);
+
+//Functions in audio
+void PlayMusic(char *filePath);
+void AudioDeviceIsPaused(bool pause);
+void PlaySoundFX(char *filePath, int volume);
+
 //Functions used in game file
 void PerFrameUpdate();
 void OnStart();
