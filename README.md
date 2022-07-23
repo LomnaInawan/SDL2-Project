@@ -5,7 +5,7 @@ A sample SDL2 project
 
 - [x] Functions to draw textures on screen
 - [x] Functions for input
-- [ ] Support for ttf fonts
-- [ ] Play music and sounds
+- [x] Support for ttf fonts
+- [x] Play music and sounds
 - [ ] Collision detection
 - [ ] Continuous collision detection 

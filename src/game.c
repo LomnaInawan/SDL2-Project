@@ -28,8 +28,8 @@ void OnStart(){
 
 void PerFrameUpdate(){
   if(KeyIsUp(SDLK_w)){
+    PlaySoundFX("assets/soundfx.wav");
     printf("Key Down\n");
-    PlaySoundFX("assets/soundfx.wav", 128);
   }
   GetMousePosition(&mpos);
 }

@@ -1,6 +1,6 @@
-#include "core.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "core.h"
 
 #define FREQUENCY 48000
 #define FORMAT AUDIO_S16LSB
@@ -15,6 +15,7 @@ SDL_AudioSpec desired, obtained;
 
 Uint8* wav_buffer = NULL;
 Uint32 wav_lenght;
+SDL_AudioSpec wav_spec;
 
 void StartAudioFunctions(){
   SDL_zero(desired);
@@ -34,16 +35,23 @@ void AudioDeviceIsPaused(bool pause){
   SDL_PauseAudioDevice(audio_device, pause);
 }
 
-void PlaySoundFX(char *filePath, int volume){
-  Uint8* soundfx_buffer;
-  Uint32 soundfx_lenght;
-
-  Uint32 size = SDL_GetQueuedAudioSize(audio_device);
+void PlaySoundFX(char *filePath){
+  AudioDeviceIsPaused(true);
+  static void* soundfx_buffer = NULL;
+  if(soundfx_buffer != NULL)
+    free(soundfx_buffer);
+  Uint32 soundfx_lenght = SDL_GetQueuedAudioSize(audio_device);
+  soundfx_buffer = (void*) malloc(soundfx_lenght);
+  memcpy(soundfx_buffer,(void*) (wav_buffer - soundfx_lenght + (2 * wav_lenght)), wav_lenght - ((2 * wav_lenght) - soundfx_lenght));
+  memcpy(soundfx_buffer + (wav_lenght - ((2 * wav_lenght) - soundfx_lenght)),(void*) wav_buffer, wav_lenght);
+  Uint8* load_buf;
+  Uint32 load_len;
+  SDL_AudioSpec load_spec;
+  SDL_LoadWAV(filePath, &load_spec, &load_buf, &load_len);
+  SDL_MixAudioFormat( soundfx_buffer, load_buf, wav_spec.format,load_len, SDL_MIX_MAXVOLUME);
   SDL_ClearQueuedAudio(audio_device);
-  Uint8* ptr = wav_buffer + wav_lenght - size;
-  SDL_LoadWAV(filePath, NULL, &soundfx_buffer, &soundfx_lenght);
-  SDL_MixAudioFormat(ptr, soundfx_buffer, FORMAT, soundfx_lenght, volume);
-  SDL_QueueAudio(audio_device, ptr, size);
+  SDL_QueueAudio(audio_device, soundfx_buffer, soundfx_lenght);
+  AudioDeviceIsPaused(false);
 }
 
 void PlayMusic(char *filePath){
@@ -51,7 +59,6 @@ void PlayMusic(char *filePath){
   if(wav_buffer != NULL){
     SDL_FreeWAV(wav_buffer);
   }
-  SDL_AudioSpec wav_spec;
 
   if(SDL_LoadWAV(filePath, &wav_spec, &wav_buffer, &wav_lenght) == NULL){
     printf("\nFailed to load WAV : %s\n", filePath);
@@ -61,14 +68,8 @@ void PlayMusic(char *filePath){
   }
 }
 
-int _count = 0;
 void AudioUpdate(){
   if(SDL_GetQueuedAudioSize(audio_device) <= wav_lenght){
     SDL_QueueAudio(audio_device, wav_buffer, wav_lenght);
   }
-  if(_count == 0){
-    //printf("%d\n", SDL_GetQueuedAudioSize(audio_device));  
-    _count = 60;
-  }
-  _count--;
 }
