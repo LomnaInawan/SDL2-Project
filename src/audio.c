@@ -51,6 +51,7 @@ void PlaySoundFX(char *filePath){
   SDL_MixAudioFormat( soundfx_buffer, load_buf, wav_spec.format,load_len, SDL_MIX_MAXVOLUME);
   SDL_ClearQueuedAudio(audio_device);
   SDL_QueueAudio(audio_device, soundfx_buffer, soundfx_lenght);
+  SDL_FreeWAV(load_buf);
   AudioDeviceIsPaused(false);
 }
 

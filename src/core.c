@@ -71,6 +71,17 @@ void SetWindow(int width, int height, int game_fps, char *title){
   _windowTitle = title;
 }
 
+void DrawRectangle(SDL_Rect rectangle, SDL_Color color){
+  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+  SDL_RenderDrawRect(renderer, &rectangle);
+}
+
+
+void DrawSolidRectangle(SDL_Rect rectangle, SDL_Color color){
+  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+  SDL_RenderFillRect(renderer, &rectangle);
+}
+
 void mainloop(){
   Uint64 startLoop = SDL_GetTicks();
   SDL_PumpEvents();
@@ -82,11 +93,11 @@ void mainloop(){
   }else if(event.type == SDL_MOUSEBUTTONUP){
     MouseButtonUp(event.button.button);
   }
-  SDL_SetRenderDrawColor(renderer, _background.r, _background.g, _background.b, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
   PerFrameUpdate(); //The Update Function
   Render(); //Render the frame
   AudioUpdate(); //Update the audio queue
+  SDL_SetRenderDrawColor(renderer, _background.r, _background.g, _background.b, SDL_ALPHA_OPAQUE);
   SDL_RenderPresent(renderer);
 
   Uint64 delta = SDL_GetTicks() - startLoop;
@@ -110,7 +121,7 @@ int main(int argc, char *argv[]){
 
   TTF_Init(); //Remove if not using sdl_ttf
 
-  renderer = SDL_CreateRenderer(window, -1 ,SDL_RENDERER_ACCELERATED);
+  renderer = SDL_CreateRenderer(window, -1 ,SDL_RENDERER_PRESENTVSYNC);
   if(renderer == NULL){
     printf("Error creating renderer : %s", SDL_GetError());
     exit(EXIT_FAILURE);

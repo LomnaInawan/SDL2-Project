@@ -9,7 +9,7 @@ typedef struct
     float y;
 } vector2D;
 
-typedef struct 
+typedef struct
 {
     SDL_Texture *texture;
     SDL_Point position;
@@ -40,6 +40,8 @@ vector2D addVectors(vector2D a, vector2D b);
 double getVectorAngle(vector2D v);
 SDL_Point newPoint(int x, int y);
 vector2D newVector(float x, float y);
+SDL_Rect NewRectangle(int x, int y, int w, int h);
+bool RectCollision(SDL_Rect a, SDL_Rect b);
 
 //Functions in text
 int ChangeCurrentFont(char *fontPath, int fontSize);
@@ -57,3 +59,5 @@ void SetBackgroundColor(SDL_Color color);
 void SetWindow(int width, int height, int game_fps, char *title);
 void MouseButtonDown(Uint8 button);
 void MouseButtonUp(Uint8 button);
+void DrawSolidRectangle(SDL_Rect rectangle, SDL_Color color);
+void DrawRectangle(SDL_Rect rectangle, SDL_Color color);

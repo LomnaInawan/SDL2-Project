@@ -160,11 +160,7 @@ void Render(){
         tw = roundOff(tw * v.x);
         th = roundOff(th * v.y);
         SDL_Rect r = {last->obj->position.x, last->obj->position.y,tw, th};
-        //if(last->obj->angle != 0.0){
         SDL_RenderCopyEx(rend,last->obj->texture,NULL,&r,last->obj->angle,&(last->obj->anchor),last->obj->flip);
-        /*}else{
-            SDL_RenderCopy(rend,last->obj->texture,NULL,&r);
-        }*/
         if(last->next == NULL){
             break;
         }

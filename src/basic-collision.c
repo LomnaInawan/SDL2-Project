@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "core.h"
 
 const double pi = 355.0 / 113.0;
@@ -17,9 +16,9 @@ int roundOff(double d){
 }
 
 double distBetweenPoints(SDL_Point a, SDL_Point b){
-    double c = ((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y));
-    c =  SDL_sqrt(c);
-    return c;
+  double c = ((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y));
+  c =  SDL_sqrt(c);
+  return c;
 }
 
 SDL_Point addPoints(SDL_Point a, SDL_Point b){
@@ -48,11 +47,16 @@ vector2D newVector(float x, float y){
     return v;
 }
 
+SDL_Rect NewRectangle(int x, int y, int w, int h){
+  SDL_Rect r = {x,y,w,h};
+  return r;
+}
+
 //Check if two rectangles are colliding
-/*bool _ObjectCollision(_object a, _object b){
-    //if(distBetweenPoints(a.midPoint, b.midPoint) > (a.radius + b.radius)) return false;
-    int delta = a.upperLeft.y - b.upperLeft.y;
-    int omega = b.upperLeft.x - a.upperLeft.x;
-    if (delta <= b.height && delta >= -a.height && omega >= -b.width && omega <= a.width) return true;
-    return false;
-}*/
+bool RectCollision(SDL_Rect a, SDL_Rect b){
+  //if(distBetweenPoints(a.midPoint, b.midPoint) > (a.radius + b.radius)) return false;
+  int delta = a.y - b.y;
+  int omega = b.x - a.x;
+  if (delta <= b.h && delta >= -a.h && omega >= -b.w && omega <= a.w) return true;
+  return false;
+}
