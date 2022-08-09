@@ -36,23 +36,38 @@ void AudioDeviceIsPaused(bool pause){
 }
 
 void PlaySoundFX(char *filePath){
-  AudioDeviceIsPaused(true);
-  static void* soundfx_buffer = NULL;
-  if(soundfx_buffer != NULL)
-    free(soundfx_buffer);
-  Uint32 soundfx_lenght = SDL_GetQueuedAudioSize(audio_device);
-  soundfx_buffer = (void*) malloc(soundfx_lenght);
-  memcpy(soundfx_buffer,(void*) (wav_buffer - soundfx_lenght + (2 * wav_lenght)), wav_lenght - ((2 * wav_lenght) - soundfx_lenght));
-  memcpy(soundfx_buffer + (wav_lenght - ((2 * wav_lenght) - soundfx_lenght)),(void*) wav_buffer, wav_lenght);
   Uint8* load_buf;
   Uint32 load_len;
   SDL_AudioSpec load_spec;
+
+  //Load soundfx buffer
   SDL_LoadWAV(filePath, &load_spec, &load_buf, &load_len);
-  SDL_MixAudioFormat( soundfx_buffer, load_buf, wav_spec.format,load_len, SDL_MIX_MAXVOLUME);
-  SDL_ClearQueuedAudio(audio_device);
-  SDL_QueueAudio(audio_device, soundfx_buffer, soundfx_lenght);
+
+  if(wav_buffer == NULL){
+    //No background music
+    SDL_LoadWAV(filePath, &load_spec, &load_buf, &load_len);
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_QueueAudio(audio_device, load_buf, load_len);
+  }else{
+    AudioDeviceIsPaused(true);
+    //The modified buffer with soundfx and background music mixed
+    static void* soundfx_buffer = NULL;
+    if(soundfx_buffer != NULL)
+      free(soundfx_buffer);
+    Uint32 soundfx_lenght = SDL_GetQueuedAudioSize(audio_device);
+    soundfx_buffer = (void*) malloc(soundfx_lenght);
+    //Copy the current audio buffer to be modified
+    memcpy(soundfx_buffer,(void*) (wav_buffer - soundfx_lenght + (2 * wav_lenght)), wav_lenght - ((2 * wav_lenght) - soundfx_lenght));
+    memcpy(soundfx_buffer + (wav_lenght - ((2 * wav_lenght) - soundfx_lenght)),(void*) wav_buffer, wav_lenght);
+    //Mix buffers
+    SDL_MixAudioFormat( soundfx_buffer, load_buf, wav_spec.format,load_len, SDL_MIX_MAXVOLUME);
+    //Load mixed audio buffer
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_QueueAudio(audio_device, soundfx_buffer, soundfx_lenght);
+    AudioDeviceIsPaused(false);
+  }
+  //Free loaded soundfx buffer
   SDL_FreeWAV(load_buf);
-  AudioDeviceIsPaused(false);
 }
 
 void PlayMusic(char *filePath){
@@ -67,6 +82,11 @@ void PlayMusic(char *filePath){
     SDL_QueueAudio(audio_device, wav_buffer, wav_lenght);
     //SDL_QueueAudio(audio_device, wav_buffer, wav_lenght);
   }
+}
+
+void FreeMusic(){
+  if(wav_buffer != NULL)
+    SDL_FreeWAV(wav_buffer);
 }
 
 void AudioUpdate(){

@@ -21,7 +21,6 @@ run(["echo", str(text)])
 if text.returncode != 0:
   run(["echo", "Compilation failed"])
   exit(text.returncode)
- 
 
 run(["echo", "Debugging"])
 run(["gdb" ,"./test","--quiet", "--eval-command=run", "--batch"], cwd="./build")

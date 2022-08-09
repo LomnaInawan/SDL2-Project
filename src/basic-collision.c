@@ -57,6 +57,5 @@ bool RectCollision(SDL_Rect a, SDL_Rect b){
   //if(distBetweenPoints(a.midPoint, b.midPoint) > (a.radius + b.radius)) return false;
   int delta = a.y - b.y;
   int omega = b.x - a.x;
-  if (delta <= b.h && delta >= -a.h && omega >= -b.w && omega <= a.w) return true;
-  return false;
+  return (delta <= b.h && delta >= -a.h && omega >= -b.w && omega <= a.w);
 }

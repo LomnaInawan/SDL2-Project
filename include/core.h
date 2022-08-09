@@ -51,6 +51,7 @@ SDL_Texture* textureFromText(char *text, SDL_Color textColor);
 void PlayMusic(char *filePath);
 void AudioDeviceIsPaused(bool pause);
 void PlaySoundFX(char *filePath);
+void FreeMusic();
 
 //Functions used in game file
 void PerFrameUpdate();
