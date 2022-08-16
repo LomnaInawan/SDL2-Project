@@ -9,6 +9,9 @@ void StartTextFunctions(SDL_Renderer *_rend){
 }
 
 int ChangeCurrentFont(char *fontPath, int fontSize){
+  if(current_font != NULL)
+    TTF_CloseFont(current_font);
+
   current_font = TTF_OpenFont(fontPath, fontSize);
   if(current_font == NULL){
     printf("Loading Font Failed ");

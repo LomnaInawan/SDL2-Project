@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from subprocess import run
 
@@ -22,8 +22,8 @@ if text.returncode != 0:
   run(["echo", "Compilation failed"])
   exit(text.returncode)
 
-run(["echo", "Debugging"])
-run(["gdb" ,"./test","--quiet", "--eval-command=run", "--batch"], cwd="./build")
+#run(["echo", "Debugging"])
+#run(["gdb" ,"./test","--quiet", "--eval-command=run", "--batch"], cwd="./build")
 
-#run(["echo", "Running Build"])
-#run(["./test"], cwd="./build")
+run(["echo", "Running Build"])
+run(["./test"], cwd="./build")
