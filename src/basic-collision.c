@@ -60,11 +60,11 @@ bool RectCollision(SDL_Rect a, SDL_Rect b){
   return (delta <= b.h && delta >= -a.h && omega >= -b.w && omega <= a.w);
 }
 
-SDL_Point ContinuousCollision(SDL_Rect moving_rect, SDL_Point last_pos, SDL_Rect static_rect){
+//Continuous collision using bisection meathod
+SDL_Point ContinuousCollision(SDL_Rect moving_rect, SDL_Point last_pos, SDL_Rect static_rect, int attempts){
   SDL_Rect midRect = {0,0,moving_rect.w, moving_rect.h};
   SDL_Point endPoint = {moving_rect.x, moving_rect.y};
-  while(absolute(moving_rect.x - last_pos.x) > moving_rect.w
-        || absolute(moving_rect.y - last_pos.y) > moving_rect.h)
+  for(int i = 0; i < attempts; i++)
   {
     midRect.x = (last_pos.x + endPoint.x) / 2;
     midRect.y = (last_pos.y + endPoint.y) / 2;
@@ -73,5 +73,5 @@ SDL_Point ContinuousCollision(SDL_Rect moving_rect, SDL_Point last_pos, SDL_Rect
     else
       last_pos = newPoint(midRect.x, midRect.y);
   }
-  return newPoint(midRect.x, midRect.y);
+  return last_pos;
 }

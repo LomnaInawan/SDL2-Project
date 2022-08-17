@@ -7,5 +7,5 @@ A sample SDL2 project
 - [x] Functions for input
 - [x] Support for ttf fonts
 - [x] Play music and sounds
-- [ ] Collision detection
-- [ ] Continuous collision detection 
+- [x] Collision detection
+- [ ] Continuous Collision suitable for platformers 

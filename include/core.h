@@ -42,7 +42,7 @@ SDL_Point newPoint(int x, int y);
 vector2D newVector(float x, float y);
 SDL_Rect NewRectangle(int x, int y, int w, int h);
 bool RectCollision(SDL_Rect a, SDL_Rect b);
-SDL_Point ContinuousCollision(SDL_Rect moving_rect, SDL_Point last_pos, SDL_Rect static_rect);
+SDL_Point ContinuousCollision(SDL_Rect moving_rect, SDL_Point last_pos, SDL_Rect static_rect, int attempts);
 
 //Functions in text
 int ChangeCurrentFont(char *fontPath, int fontSize);

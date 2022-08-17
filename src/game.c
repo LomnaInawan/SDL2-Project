@@ -6,17 +6,17 @@
 
 typedef enum {playing, game_over} game_state;
 
-game_state current_state = game_over;
+game_state current_state = playing;
 const SDL_Color birdColor = {255,255,0,255};
 SDL_Rect bird = {580,0,50,50};
 
 const SDL_Color platformColor = {0,255,0,255};
-SDL_Rect platform = {0, 690, WIDTH, 30};
+SDL_Rect platform = {690, 400, 100, 100};
 
 const int gravity = 2;
 const int jump = 18;
 const int _velocity_cap = 12;
-const int velocityX = 5;
+const int velocityX = 10;
 
 int _bird_velocityY = 0;
 int _bird_velocityX = 0;
@@ -41,11 +41,8 @@ void DrawGame(){
 SDL_Point _last_pos;
 void PerFrameUpdate(){
   if(current_state == playing){
-    //Gravity and flapping
-    _bird_velocityY += (_bird_velocityY >= _velocity_cap) ? 0 : gravity;
-    if(KeyIsUp(SDLK_SPACE) && _bird_velocityY >= 0)
-      _bird_velocityY = jump * -1;
-
+    //Movement in Y axis
+    _bird_velocityY = ( KeyIsPressed(SDL_SCANCODE_S) - KeyIsPressed(SDL_SCANCODE_W) ) * velocityX;
     //Movement in X axis
     _bird_velocityX = ( KeyIsPressed(SDL_SCANCODE_D) - KeyIsPressed(SDL_SCANCODE_A) ) * velocityX;
 
@@ -55,7 +52,7 @@ void PerFrameUpdate(){
     bird.x += _bird_velocityX;
 
     if(RectCollision(bird, platform)){
-      SDL_Point tempPoint = ContinuousCollision(bird, _last_pos, platform);
+      SDL_Point tempPoint = ContinuousCollision(bird, _last_pos, platform, 4);
       bird.x = tempPoint.x;
       bird.y = tempPoint.y;
     }
